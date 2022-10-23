@@ -30,7 +30,15 @@ function objectToColumns(data) {
                    found = true
                }
             }
-            if (!found) columns.push({field: documentID, headerName: documentID, width: 200})
+            if (!found) {
+                if (documentID == "monthly price") {
+                    columns.push({field: documentID, headerName: documentID, width: 200, editable: true, type: "number"})
+                } else {
+                    columns.push({field: documentID, headerName: documentID, width: 200, editable: true})
+
+                }
+
+            }
         }
 
     }
@@ -48,8 +56,8 @@ function objectToColumns(data) {
 function getPrimaryGridDetailPanelContent(props) {
     return(
         <>
-            <h1>{props.row.name}</h1>
-            <h1>{props.row.manager}</h1>
+            <p>{props.row.name}</p>
+            <p>{props.row.manager}</p>
         </>
     )
 }
@@ -58,6 +66,9 @@ export default function Home(props) {
     const [data, setData] = useState(props.data)
     const [primaryGridRows, setPrimaryGridRows] = useState(objectToRows(data))
     const [primaryGridColumns, setPrimaryGridColumns] = useState(objectToColumns(data))
+
+    const [secondaryGridRows, setSecondaryGridRows] = useState([])
+    const [secondaryGridColumns, setSecondaryGridColumns] = useState([])
 
 
     console.log(primaryGridRows)
@@ -70,7 +81,7 @@ export default function Home(props) {
                 components={{ Toolbar: GridToolbar }}
                 getDetailPanelHeight= {() => "auto"}
                 getDetailPanelContent = {getPrimaryGridDetailPanelContent}
-                experimentalFeatures={{aggregation: true}}
+                experimentalFeatures={{aggregation: true, newEditingApi: true}}
                 checkboxSelection
                 onSelectionModelChange={(selectionModel) => console.log(selectionModel)}
                 columns={primaryGridColumns}
@@ -79,9 +90,12 @@ export default function Home(props) {
 
         <Box sx = {{height: "50vh", width: "100%"}}>
             <DataGridPremium
+                components={{ Toolbar: GridToolbar }}
+                rowReordering
+                experimentalFeatures={{aggregation: true}}
                 checkboxSelection
-                columns={[]}
-                rows={[]}/>
+                columns={secondaryGridColumns}
+                rows={secondaryGridRows}/>
         </Box>
       </>
   )
