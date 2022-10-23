@@ -13,10 +13,41 @@ export async function getStaticProps(){
 }
 
 
+function objectToColumns(data) {
+    let columns = []
+
+
+    for (let propertyID in data) {     // traverse all property keys in data
+        let infoCollection = data[propertyID].info.info
+        for (let documentID in infoCollection) {   // traverse all documents in info
+            // for each thing in the info collection
+            let found = false // in the thing has a column
+            for(let elem in columns) { // for each document in info, check to see if it has a column
+                console.log("id: ")
+
+                console.log(columns[elem].field)
+               if (columns[elem].field === documentID) {
+                   found = true
+               }
+            }
+            if (!found) columns.push({field: documentID, headerName: documentID, width: 200})
+        }
+
+    }
+
+    console.log("columns data: ")
+    console.log(columns)
+
+
+
+
+    return columns;
+}
+
 export default function Home(props) {
     const [data, setData] = useState(props.data)
     const [primaryGridRows, setPrimaryGridRows] = useState(objectToRows(data))
-    const [primaryGridColumns, setPrimaryGridColumns] = useState([{ field: 'id', headerName: 'ID', width: 90}])
+    const [primaryGridColumns, setPrimaryGridColumns] = useState(objectToColumns(data))
 
 
     console.log(primaryGridRows)
@@ -29,11 +60,11 @@ export default function Home(props) {
                 rows={primaryGridRows}/>
         </Box>
 
-        <div>
+        <Box sx = {{height: "50vh", width: "100%"}}>
             <DataGridPremium
                 columns={[]}
                 rows={[]}/>
-        </div>
+        </Box>
       </>
   )
 }
