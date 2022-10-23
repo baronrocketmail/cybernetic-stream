@@ -56,12 +56,15 @@ export default function Home(props) {
       <>
         <Box sx = {{height: "50vh", width: "100%"}}>
             <DataGridPremium
+                checkboxSelection
+                onSelectionModelChange={(selectionModel) => console.log(selectionModel)}
                 columns={primaryGridColumns}
                 rows={primaryGridRows}/>
         </Box>
 
         <Box sx = {{height: "50vh", width: "100%"}}>
             <DataGridPremium
+                checkboxSelection
                 columns={[]}
                 rows={[]}/>
         </Box>
