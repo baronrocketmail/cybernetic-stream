@@ -1,4 +1,4 @@
-import {DataGridPremium} from "@mui/x-data-grid-premium";
+import {DataGridPremium, GridToolbar} from "@mui/x-data-grid-premium";
 import {fetchAllUnits} from "./api/DataFetching";
 import {useState} from "react";
 import {Box} from "@mui/material";
@@ -44,6 +44,16 @@ function objectToColumns(data) {
     return columns;
 }
 
+
+function getPrimaryGridDetailPanelContent(props) {
+    return(
+        <>
+            <h1>{props.row.name}</h1>
+            <h1>{props.row.manager}</h1>
+        </>
+    )
+}
+
 export default function Home(props) {
     const [data, setData] = useState(props.data)
     const [primaryGridRows, setPrimaryGridRows] = useState(objectToRows(data))
@@ -56,6 +66,11 @@ export default function Home(props) {
       <>
         <Box sx = {{height: "50vh", width: "100%"}}>
             <DataGridPremium
+                rowReordering
+                components={{ Toolbar: GridToolbar }}
+                getDetailPanelHeight= {() => "auto"}
+                getDetailPanelContent = {getPrimaryGridDetailPanelContent}
+                experimentalFeatures={{aggregation: true}}
                 checkboxSelection
                 onSelectionModelChange={(selectionModel) => console.log(selectionModel)}
                 columns={primaryGridColumns}
