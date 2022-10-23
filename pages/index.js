@@ -68,12 +68,13 @@ function handlePrimaryGridSelectionModelChange(selectionModel) {
     return undefined;
 }
 
+
 export default function Home(props) {
     const [data, setData] = useState(props.data)
     const [primaryGridRows, setPrimaryGridRows] = useState(objectToRows(data))
     const [primaryGridColumns, setPrimaryGridColumns] = useState(objectToColumns(data))
 
-    const [secondaryGridRows, setSecondaryGridRows] = useState([])
+    const [secondaryGridRows, setSecondaryGridRows] = useState(getPaymentsDataset(data))
     const [secondaryGridColumns, setSecondaryGridColumns] = useState([])
 
 
@@ -106,6 +107,27 @@ export default function Home(props) {
       </>
   )
 }
+function getPaymentsDataset(data){
+    let returnObj = {}
+    for (let propertyID in data) {  // for each property,
+        let PaymentsObj = data[propertyID].payments  // get the payments object
+        let propertyPayments = []
+        for(let paymentID in PaymentsObj){   // traverse each payment for the property
+            let formattedPropertyPaymentsObj = {id: paymentID}
+
+            for (let docID in PaymentsObj[paymentID]){ // tra
+
+                formattedPropertyPaymentsObj[docID] = PaymentsObj[paymentID][docID]
+            }
+            propertyPayments.push(formattedPropertyPaymentsObj)
+        }
+        returnObj[propertyID] = propertyPayments
+    }
+    console.log(2398)
+    console.log(returnObj)
+    return returnObj
+}
+
 
 function objectToRows(data){
 
