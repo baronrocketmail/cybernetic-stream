@@ -62,6 +62,12 @@ function getPrimaryGridDetailPanelContent(props) {
     )
 }
 
+function handlePrimaryGridSelectionModelChange(selectionModel) {
+    console.log(selectionModel)
+    alert(selectionModel)
+    return undefined;
+}
+
 export default function Home(props) {
     const [data, setData] = useState(props.data)
     const [primaryGridRows, setPrimaryGridRows] = useState(objectToRows(data))
@@ -75,7 +81,7 @@ export default function Home(props) {
 
   return (
       <>
-        <Box sx = {{height: "50vh", width: "100%"}}>
+        <Box sx = {{height: "100vh", width: "100%"}}>
             <DataGridPremium
                 rowReordering
                 components={{ Toolbar: GridToolbar }}
@@ -83,7 +89,7 @@ export default function Home(props) {
                 getDetailPanelContent = {getPrimaryGridDetailPanelContent}
                 experimentalFeatures={{aggregation: true, newEditingApi: true}}
                 checkboxSelection
-                onSelectionModelChange={(selectionModel) => console.log(selectionModel)}
+                onSelectionModelChange={(selectionModel) => handlePrimaryGridSelectionModelChange(selectionModel)}
                 columns={primaryGridColumns}
                 rows={primaryGridRows}/>
         </Box>
