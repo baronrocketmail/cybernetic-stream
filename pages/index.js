@@ -15,17 +15,12 @@ export async function getStaticProps(){
 
 function objectToColumns(data) {
     let columns = []
-
-
     for (let propertyID in data) {     // traverse all property keys in data
         let infoCollection = data[propertyID].info.info
         for (let documentID in infoCollection) {   // traverse all documents in info
             // for each thing in the info collection
             let found = false // in the thing has a column
             for(let elem in columns) { // for each document in info, check to see if it has a column
-                console.log("id: ")
-
-                console.log(columns[elem].field)
                if (columns[elem].field === documentID) {
                    found = true
                }
@@ -43,15 +38,29 @@ function objectToColumns(data) {
 
     }
 
-    console.log("columns data: ")
-    console.log(columns)
-
-
-
 
     return columns;
 }
-
+function objectToColumnsSecondary(data) {
+    let columns = []
+    for(let propertyID in data) {
+        let paymentsObj = data[propertyID].payments
+        for(let payment in paymentsObj) {
+            for(let documentID in paymentsObj[payment]) {
+                let found = false
+                for(let elem in columns) {
+                    if (documentID === columns[elem].field) {
+                        found = true
+                    }
+                }
+                if(!found) {
+                    columns.push({field: documentID,  headerName: documentID, width: 150})
+                }
+            }
+        }
+    }
+    return columns
+}
 
 function getPrimaryGridDetailPanelContent(props) {
     return(
@@ -63,8 +72,6 @@ function getPrimaryGridDetailPanelContent(props) {
 }
 
 function handlePrimaryGridSelectionModelChange(selectionModel) {
-    console.log(selectionModel)
-    alert(selectionModel)
     return undefined;
 }
 
@@ -75,10 +82,7 @@ export default function Home(props) {
     const [primaryGridColumns, setPrimaryGridColumns] = useState(objectToColumns(data))
 
     const [secondaryGridRows, setSecondaryGridRows] = useState(getPaymentsDataset(data))
-    const [secondaryGridColumns, setSecondaryGridColumns] = useState([])
-
-
-    console.log(primaryGridRows)
+    const [secondaryGridColumns, setSecondaryGridColumns] = useState(objectToColumnsSecondary(data))
 
   return (
       <>
@@ -123,8 +127,6 @@ function getPaymentsDataset(data){
         }
         returnObj[propertyID] = propertyPayments
     }
-    console.log(2398)
-    console.log(returnObj)
     return returnObj
 }
 
@@ -136,9 +138,6 @@ function objectToRows(data){
     for (let propertyID in data){
         // For each property
         let row = {id: propertyID}  // create a new row representing the property
-        console.log("data: ")
-
-        console.log(data)
 
         let propertyInfoCollection = data[propertyID].info.info
 
