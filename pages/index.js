@@ -32,10 +32,10 @@ const theme = createTheme({
 export default function Home(props) {
     const apiRef = useGridApiRef();
     const [data, setData] = useState(props.data)
+    const [paymentsDataset, setPaymentsDataset] = useState(getPaymentsDataset(data))
     const [primaryGridRows, setPrimaryGridRows] = useState(objectToRows(data))
     const [primaryGridColumns, setPrimaryGridColumns] = useState(objectToColumns(data))
-    const [secondaryGridRows, setSecondaryGridRows] = useState(getPaymentsDataset(data))
-    const [secondaryGridRowsActive, setSecondaryGridRowsActive] = useState([])
+    const [secondaryGridRows, setSecondaryGridRows] = useState([])
     const [secondaryGridColumns, setSecondaryGridColumns] = useState(objectToColumnsSecondary(data))
 
     return (
