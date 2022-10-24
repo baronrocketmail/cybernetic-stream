@@ -63,14 +63,6 @@ export default function Home(props) {
 
             <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
                 <DataGridPremium
-                    onStateChange={x => {
-                        if ((new Date() - nextTimeUpdateOkay ) >= 0) {
-                            uploadStateChange(x)
-                            let tempTime = new Date()
-                            tempTime.setSeconds(tempTime.getSeconds()+2)
-                            setNextTimeUpdateOkay(tempTime)
-                        }
-                    } }
                     rowReordering
                     components={{Toolbar: GridToolbar}}
                     getDetailPanelContent={getPrimaryGridDetailPanelContent}
