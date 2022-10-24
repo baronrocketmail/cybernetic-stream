@@ -71,9 +71,6 @@ function getPrimaryGridDetailPanelContent(props) {
     )
 }
 
-function handlePrimaryGridSelectionModelChange(selectionModel) {
-    return undefined;
-}
 
 
 export default function Home(props) {
@@ -82,7 +79,27 @@ export default function Home(props) {
     const [primaryGridColumns, setPrimaryGridColumns] = useState(objectToColumns(data))
 
     const [secondaryGridRows, setSecondaryGridRows] = useState(getPaymentsDataset(data))
+    const [secondaryGridRowsActive, setSecondaryGridRowsActive] = useState([])
+
     const [secondaryGridColumns, setSecondaryGridColumns] = useState(objectToColumnsSecondary(data))
+
+
+    console.log(secondaryGridRows)
+    console.log(secondaryGridColumns)
+
+    function handlePrimaryGridSelectionModelChange(selectionModel) {
+
+        let array = []
+        for(let elem in selectionModel) {
+            array.push(... secondaryGridRows[selectionModel[elem]])
+        }
+
+        console.log(array)
+
+        setSecondaryGridRowsActive(array)
+
+        return undefined;
+    }
 
   return (
       <>
@@ -106,7 +123,7 @@ export default function Home(props) {
                 experimentalFeatures={{aggregation: true}}
                 checkboxSelection
                 columns={secondaryGridColumns}
-                rows={secondaryGridRows}/>
+                rows={secondaryGridRowsActive}/>
         </Box>
       </>
   )
@@ -117,7 +134,7 @@ function getPaymentsDataset(data){
         let PaymentsObj = data[propertyID].payments  // get the payments object
         let propertyPayments = []
         for(let paymentID in PaymentsObj){   // traverse each payment for the property
-            let formattedPropertyPaymentsObj = {id: paymentID}
+            let formattedPropertyPaymentsObj = {id: propertyID + ": " + paymentID}
 
             for (let docID in PaymentsObj[paymentID]){ // tra
 
