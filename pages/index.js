@@ -71,10 +71,13 @@ export default function Home(props) {
 
     return (
         <>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme2}>
 
-            <Box sx={{height: "100vh", width: "100%" , border: "0"}}>
+            <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
                 <DataGridPremium
+
+                    onStateChange={(x)=>console.log(x)}
+
                     rowReordering
                     components={{Toolbar: GridToolbar}}
                     getDetailPanelHeight={() => "auto"}
