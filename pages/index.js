@@ -13,8 +13,6 @@ export async function getStaticProps(){
     }
 }
 
-
-
 function getPrimaryGridDetailPanelContent(props) {
     return(
         <>
@@ -22,6 +20,8 @@ function getPrimaryGridDetailPanelContent(props) {
         </>
     )
 }
+
+
 
 export default function Home(props) {
     const [data, setData] = useState(props.data)
@@ -41,7 +41,7 @@ export default function Home(props) {
 
     return (
         <>
-            <Box sx={{height: "100vh", width: "100%"}}>
+            <Box sx={{height: "100vh", width: "100%" , border: "0"}}>
                 <DataGridPremium
                     rowReordering
                     components={{Toolbar: GridToolbar}}
