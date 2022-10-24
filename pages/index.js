@@ -13,26 +13,6 @@ const theme = createTheme({
         }
     }
 })
-const theme2 = createTheme({
-    palette: {
-        type: 'light',
-        primary: {
-            main: '#3f51b5',
-        },
-        secondary: {
-            main: '#f50057',
-        },
-        text: {
-            primary: 'rgba(255,255,255,0.87)',
-            secondary: 'rgba(255,255,255,0.54)',
-            disabled: 'rgba(140,140,140,0.38)',
-        },
-        background: {
-            default: '#000000',
-            paper: '#000000',
-        },
-    },
-})
 
 export async function getStaticProps(){
     let data = await fetchAllUnits()
@@ -71,7 +51,7 @@ export default function Home(props) {
 
     return (
         <>
-            <ThemeProvider theme={theme2}>
+            <ThemeProvider theme={theme}>
 
             <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
                 <DataGridPremium
