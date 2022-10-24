@@ -1,5 +1,5 @@
 import {DataGridPremium, GridToolbar, useGridApiRef} from "@mui/x-data-grid-premium";
-import {fetchAllUnits, uploadStateChange} from "./api/DataFetching";
+import {fetchAllUnits, uploadNewCellState, uploadStateChange} from "./api/DataFetching.mjs";
 import React, {createContext, useContext, useState} from "react";
 import {Box, ThemeProvider, createTheme, colors} from "@mui/material";
 import {objectToRows,objectToColumns,getPaymentsDataset, objectToColumnsSecondary} from "./api/dataTransformations"
@@ -98,11 +98,21 @@ function PrimaryGrid(){
             </>
         )
     }
+    async function processRowUpdate(newCellState, oldCellState){
+        return new Promise( function (resolve, reject){
+            console.log("one")
+            console.log(newCellState)
+            console.log("two")
+            console.log(oldCellState)
+            uploadNewCellState(newCellState, oldCellState).then(resolve(newCellState))
+        })
+    }
 
     return (
         <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
             <DataGridPremium
                 rowReordering
+                processRowUpdate={processRowUpdate}
                 components={{Toolbar: GridToolbar}}
                 getDetailPanelContent={getPrimaryGridDetailPanelContent}
                 getDetailPanelHeight={()=> "auto"}

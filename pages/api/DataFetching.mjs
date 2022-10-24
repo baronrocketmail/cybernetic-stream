@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {getFirestore, query, where, collection, getDocs , addDoc, serverTimestamp} from "firebase/firestore";
+import {getFirestore, query, where, collection, getDocs , addDoc, serverTimestamp, doc, updateDoc, setDoc} from "firebase/firestore";
 
 /// INITIALIZE fire FIREBASE and FIRESTORE
 const firebaseConfig = {
@@ -72,4 +72,18 @@ export async function uploadStateChange(gridState){
         resolve("saved")
     })
 }
+
+export async function uploadNewCellState(newCellState, oldCellState){
+    for(let key in newCellState){
+        if (newCellState[key] !== oldCellState[key]) {
+            console.log(key)
+            const docRef = doc(firestore, "units/"+newCellState.id+"/info/info");
+            let update = { }
+            update[key] = newCellState[key]
+            console.log(update)
+            await updateDoc(docRef, update)
+        }
+    }
+}
+
 
