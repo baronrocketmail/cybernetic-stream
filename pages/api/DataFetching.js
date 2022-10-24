@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {getFirestore, query, where, collection, getDocs } from "firebase/firestore";
+import {getFirestore, query, where, collection, getDocs , addDoc, serverTimestamp} from "firebase/firestore";
 
 /// INITIALIZE fire FIREBASE and FIRESTORE
 const firebaseConfig = {
@@ -59,5 +59,18 @@ async function getCollection(propertyID, collectionID) {
         resolve(returnObj)
     })
 
+}
+
+export async function uploadStateChange(gridState){
+    let newState = gridState.detailPanel.contentCache = {}
+    newState = JSON.stringify(newState)
+    await addDoc(collection(firestore, "websites/cybernetic stream/states"), {
+        createdAt: serverTimestamp(),
+        gridState: newState,
+    })
+    console.log("SAVED")
+    return new Promise(function (resolve, reject){
+        resolve("saved")
+    })
 }
 

@@ -1,8 +1,8 @@
-import {DataGridPremium, GridToolbar} from "@mui/x-data-grid-premium";
-import {fetchAllUnits} from "./api/DataFetching";
+import {DataGridPremium, GridToolbar, useGridApiRef} from "@mui/x-data-grid-premium";
+import {fetchAllUnits, uploadStateChange} from "./api/DataFetching";
 import {useState} from "react";
 import {Box, ThemeProvider, createTheme, colors} from "@mui/material";
-import {objectToRows,objectToColumns,getPaymentsDataset, objectToColumnsSecondary } from "./api/dataTransformations"
+import {objectToRows,objectToColumns,getPaymentsDataset, objectToColumnsSecondary} from "./api/dataTransformations"
 
 const theme = createTheme({
     palette: {
@@ -32,8 +32,16 @@ function getPrimaryGridDetailPanelContent(props) {
 }
 
 
+async function handleStateChange(gridState ) {
+
+    console.log("UPDATEEE")
+
+
+    // uploadStateChange(JSON.stringify(gridState.columns))
+}
 
 export default function Home(props) {
+    const [nextTimeUpdateOkay, setNextTimeUpdateOkay] = useState(new Date())
     const [data, setData] = useState(props.data)
     const [primaryGridRows, setPrimaryGridRows] = useState(objectToRows(data))
     const [primaryGridColumns, setPrimaryGridColumns] = useState(objectToColumns(data))
@@ -55,12 +63,16 @@ export default function Home(props) {
 
             <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
                 <DataGridPremium
-
-                    onStateChange={(x)=>console.log(x)}
-
+                    onStateChange={x => {
+                        if ((new Date() - nextTimeUpdateOkay ) >= 0) {
+                            uploadStateChange(x)
+                            let tempTime = new Date()
+                            tempTime.setSeconds(tempTime.getSeconds()+2)
+                            setNextTimeUpdateOkay(tempTime)
+                        }
+                    } }
                     rowReordering
                     components={{Toolbar: GridToolbar}}
-                    getDetailPanelHeight={() => "auto"}
                     getDetailPanelContent={getPrimaryGridDetailPanelContent}
                     experimentalFeatures={{aggregation: true, newEditingApi: true}}
                     checkboxSelection
