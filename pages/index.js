@@ -116,7 +116,7 @@ export default function Home(props) {
                 rows={primaryGridRows}/>
         </Box>
 
-        <Box sx = {{height: "50vh", width: "100%"}}>
+        <Box sx = {{height: "100vh", width: "100%"}}>
             <DataGridPremium
                 components={{ Toolbar: GridToolbar }}
                 rowReordering
