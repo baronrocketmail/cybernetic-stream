@@ -24,7 +24,7 @@ export async function getStaticProps(){
 const theme = createTheme({
     palette: {
         primary:{
-            main: colors.orange[900],
+            main: colors.blue[900],
         },
     },
     typography : {
@@ -135,6 +135,7 @@ function PrimaryGrid(props){
                 apiRef={apiRef}
                 initialState = {props.initialState}
                 rowReordering
+                density ="compact"
                 onColumnResize={x=> console.log(x)}
                 onColumnVisibilityModelChange = {onColumnVisibilityModelChange}
                 processRowUpdate={uploadNewCellState}
