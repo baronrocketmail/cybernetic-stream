@@ -98,7 +98,7 @@ export async function uploadNewCellState(newCellState, oldCellState){
                 await updateDoc(docRef, update).then((x) => resolve(newCellState))
             }
         }
-        reject(oldCellState)
+        resolve(oldCellState)
 
     })
 }
