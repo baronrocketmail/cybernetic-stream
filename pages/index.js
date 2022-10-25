@@ -1,4 +1,4 @@
-import {DataGridPremium, GridToolbar, useGridApiRef} from "@mui/x-data-grid-premium";
+import {DataGridPremium, GridToolbar, useGridApiRef, useGridApiContext} from "@mui/x-data-grid-premium";
 import {fetchAllUnits, uploadNewCellState, uploadStateChange} from "./api/DataFetching.mjs";
 import React, {createContext, useContext, useState} from "react";
 import {Box, ThemeProvider, createTheme, colors} from "@mui/material";
@@ -87,12 +87,15 @@ function PrimaryGrid(){
     const secondaryGridRowsObj = useContext(SecondaryGridRowsContext)
 
     function handlePrimaryGridSelectionModelChange(selectionModel) {
+        const apiRef = useGridApiContext()
+        console.log(apiRef.current.exportState())
         let array = []
         for (let propertyName in selectionModel) {
             let datasetKey = selectionModel[propertyName]
             array.push(... paymentsDatasetObj.paymentsDataset[datasetKey])
         }
         secondaryGridRowsObj.setSecondaryGridRows(array)
+        console.log(selectionModel)
     }
 
     function getPrimaryGridDetailPanelContent(props) {
@@ -103,20 +106,31 @@ function PrimaryGrid(){
         )
     }
 
+    function onColumnVisibilityModelChange(x){
+        console.log(x)
+    }
+
+
+
+
+
     return (
         <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
             <DataGridPremium
                 rowReordering
+                onColumnVisibilityModelChange = {onColumnVisibilityModelChange}
                 processRowUpdate={uploadNewCellState}
                 components={{Toolbar: GridToolbar}}
                 getDetailPanelContent={getPrimaryGridDetailPanelContent}
                 getDetailPanelHeight={()=> "auto"}
                 experimentalFeatures={{aggregation: true, newEditingApi: true}}
                 checkboxSelection
-                onSelectionModelChange={(selectionModel) => handlePrimaryGridSelectionModelChange(selectionModel)}
+                onSelectionModelChange={handlePrimaryGridSelectionModelChange}
                 columns={columnsObj.primaryGridColumns}
                 rows={rowsObj.primaryGridRows}
             />
         </Box>
     )
 }
+
+
