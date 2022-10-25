@@ -15,7 +15,10 @@ export async function getStaticProps(){
 const theme = createTheme({
     palette: {
         primary:{
-            main: colors.orange[900],
+            main: colors.purple[700],
+        },
+        text: {
+            primary: colors.grey[50],
         }
     },
     typography : {
