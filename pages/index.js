@@ -8,7 +8,7 @@ export async function getStaticProps(){
     let data = await fetchAllUnits()
     return{
         props: {data},
-        revalidate: 0.3
+        revalidate: 1
     }
 }
 
