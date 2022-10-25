@@ -17,7 +17,10 @@ const theme = createTheme({
         primary:{
             main: colors.orange[900],
         }
-    }
+    },
+    typography : {
+        fontFamily: ["Goldman Sans"],
+    },
 })
 
 const PrimaryGridColumnsContext = createContext({})

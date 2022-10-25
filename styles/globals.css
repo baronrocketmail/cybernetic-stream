@@ -1,4 +1,7 @@
-
+@font-face {
+    font-family: Goldman Sans;
+    src: url("../public/GoldmanSans_W_Rg.woff2") format("woff2") 
+}
 
 html,
 body {
