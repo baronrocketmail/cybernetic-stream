@@ -62,14 +62,14 @@ async function getCollection(propertyID, collectionID) {
 }
 
 export async function uploadStateChange(gridState){
-    gridState.detailPanel.contentCache = {}
-    await addDoc(collection(firestore, "websites/cybernetic stream/states"), {
-        createdAt: serverTimestamp(),
-        gridState: JSON.stringify(gridState),
+    return new Promise(function(resolve,reject) {
+        setDoc(doc(firestore, "websites/cybernetic stream/states", "main"),  { createdAt: serverTimestamp(), gridState: JSON.stringify(gridState)}).then(resolve("state updated"))
     })
-    console.log("SAVED")
-    return new Promise(function (resolve, reject){
-        resolve("saved")
+}
+
+export async function getPrimaryGridState(){
+    return new Promise(function(resolve, reject){
+        getDoc(doc(firestore, "websites/cybernetic stream/states", "main")).then(x => resolve((JSON.parse(x.data().gridState))))
     })
 }
 
