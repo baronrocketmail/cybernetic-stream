@@ -2,14 +2,21 @@ import {DataGridPremium, GridToolbar, useGridApiRef, useGridApiContext} from "@m
 import {fetchAllUnits, uploadNewCellState, uploadStateChange, getPrimaryGridState} from "./api/DataFetching.mjs";
 import React, {createContext, useContext, useState} from "react";
 import {Box, ThemeProvider, createTheme, colors} from "@mui/material";
-import {objectToRows,objectToColumns,getPaymentsDataset, objectToColumnsSecondary} from "./api/dataTransformations"
+import {objectToRows,objectToColumns,getPaymentsDataset, objectToColumnsSecondary, getPrimaryColumnVisibilityModelState} from "./api/dataTransformations"
 import { GridApi } from '@mui/x-data-grid-premium';
+import { initializeApp } from "firebase/app";
+import {getFirestore, query, where, collection, getDocs , addDoc, serverTimestamp, doc, updateDoc, setDoc, getDoc} from "firebase/firestore";
 
 export async function getStaticProps(){
     let initialPrimaryGridState = await getPrimaryGridState()
+    let initialColumnVisibilityModel = await getColumnVisibility()
+    let fullInitialState = initialPrimaryGridState
+    fullInitialState.columns.columnVisibilityModel = initialColumnVisibilityModel
+
+
     let data = await fetchAllUnits()
     return{
-        props: {data, initialPrimaryGridState},
+        props: {data, fullInitialState},
         revalidate: 1
     }
 }
@@ -49,7 +56,7 @@ export default function Home(props) {
                 <SecondaryGridColumnsContext.Provider value = {{secondaryGridColumns, setSecondaryGridColumns}}>
                 <SecondaryGridRowsContext.Provider value = {{secondaryGridRows, setSecondaryGridRows}}>
                 <PaymentsDatasetContext.Provider value = {{paymentsDataset, setPaymentsDataset}}>
-                <PrimaryGrid initialState = {props.initialPrimaryGridState}/>
+                    <PrimaryGrid initialState = {props.fullInitialState}/>
                 <SecondaryGrid/>
                 </PaymentsDatasetContext.Provider>
                 </SecondaryGridRowsContext.Provider>
@@ -110,13 +117,17 @@ function PrimaryGrid(props){
             </>
         )
     }
-
     function onColumnVisibilityModelChange(x){
+        console.log("INITIALSTATE")
+        console.log(props.initialState)
+        console.log(apiRef.current)
+        console.log(x)
+        uploadColumnVisibility(x).then(console.log("TITANIC"))
+
         uploadStateChange(apiRef.current.exportState()).then(console.log("donLSKJDALKDJAKe"))
     }
 
     const apiRef = useGridApiRef()
-
 
     return (
         <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
@@ -140,4 +151,25 @@ function PrimaryGrid(props){
     )
 }
 
+/// INITIALIZE fire FIREBASE and FIRESTORE
+const firebaseConfig = {
+    apiKey: "AIzaSyDPGmgTxlAsVkakZrGbs8NTF2r0RcWu_ig",
+    authDomain: "luminous-lambda-364207.firebaseapp.com",
+    projectId: "luminous-lambda-364207",
+    storageBucket: "luminous-lambda-364207.appspot.com",
+    messagingSenderId: "518969290682",
+    appId: "1:518969290682:web:d7be744cb378ec83d4f783"
+};
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore()
 
+export async function uploadColumnVisibility(gridState){    return new Promise(function(resolve,reject) {
+    setDoc(doc(firestore, "websites/cybernetic stream/states", "ColumnVisibilityModel"),  { createdAt: serverTimestamp(), gridState: JSON.stringify(gridState)}).then(resolve("state updated"))
+})
+}
+
+export async function getColumnVisibility(gridState){
+    return new Promise(function(resolve, reject){
+        getDoc(doc(firestore, "websites/cybernetic stream/states", "ColumnVisibilityModel")).then(x => resolve((JSON.parse(x.data().gridState))))
+    })
+}

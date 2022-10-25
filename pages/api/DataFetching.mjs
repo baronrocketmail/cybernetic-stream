@@ -67,14 +67,26 @@ export async function uploadStateChange(gridState){
     })
 }
 
+export async function getStandardState(){
+    return new Promise(function(resolve, reject){
+        getDoc(doc(firestore, "websites/cybernetic stream/states", "main")).then(x => resolve((JSON.parse(x.data().gridState))))
+    })
+}
+
 export async function getPrimaryGridState(){
+    let standardState = await getStandardState()
+    let ColumnVisibilityModelState = await getPrimaryColumnVisibilityModelState()
+    return new Promise(function(resolve, reject){
+        resolve({...standardState, ...ColumnVisibilityModelState})
+    })
+}
+export async function getPrimaryColumnVisibilityModelState(){
     return new Promise(function(resolve, reject){
         getDoc(doc(firestore, "websites/cybernetic stream/states", "main")).then(x => resolve((JSON.parse(x.data().gridState))))
     })
 }
 
 export async function uploadNewCellState(newCellState, oldCellState){
-
     return new Promise(async function(resolve, reject) {
         for(let key in newCellState){
             if (newCellState[key] !== oldCellState[key]) {
@@ -87,11 +99,11 @@ export async function uploadNewCellState(newCellState, oldCellState){
             }
         }
         reject(oldCellState)
-        
+
     })
-
-
-
 }
 
-
+export async function uploadColumnVisibility(gridState){    return new Promise(function(resolve,reject) {
+        setDoc(doc(firestore, "websites/cybernetic stream/states", "ColumnVisibilityModel"),  { createdAt: serverTimestamp(), gridState: JSON.stringify(gridState)}).then(resolve("state updated"))
+})
+}
