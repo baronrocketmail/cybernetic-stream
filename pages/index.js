@@ -8,7 +8,7 @@ export async function getStaticProps(){
     let data = await fetchAllUnits()
     return{
         props: {data},
-        revalidate: 1
+        revalidate: 0.3
     }
 }
 
@@ -102,21 +102,12 @@ function PrimaryGrid(){
             </>
         )
     }
-    async function processRowUpdate(newCellState, oldCellState){
-        return new Promise( function (resolve, reject){
-            console.log("one")
-            console.log(newCellState)
-            console.log("two")
-            console.log(oldCellState)
-            uploadNewCellState(newCellState, oldCellState).then(resolve(newCellState))
-        })
-    }
 
     return (
         <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
             <DataGridPremium
                 rowReordering
-                processRowUpdate={processRowUpdate}
+                processRowUpdate={uploadNewCellState}
                 components={{Toolbar: GridToolbar}}
                 getDetailPanelContent={getPrimaryGridDetailPanelContent}
                 getDetailPanelHeight={()=> "auto"}
