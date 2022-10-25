@@ -33,7 +33,6 @@ const PaymentsDatasetContext = createContext({})
 
 
 export default function Home(props) {
-    console.log(props.initialPrimaryGridState)
 
     const [data, setData] = useState(props.data)
     const [paymentsDataset, setPaymentsDataset] = useState(getPaymentsDataset(data))
@@ -86,6 +85,8 @@ export default function Home(props) {
 
 function PrimaryGrid(props){
 
+    console.log(props.initialState)
+
 
     const columnsObj = useContext(PrimaryGridColumnsContext)
     const rowsObj = useContext(PrimaryGridRowsContext)
@@ -100,7 +101,6 @@ function PrimaryGrid(props){
             array.push(... paymentsDatasetObj.paymentsDataset[datasetKey])
         }
         secondaryGridRowsObj.setSecondaryGridRows(array)
-        console.log(selectionModel)
     }
 
     function getPrimaryGridDetailPanelContent(props) {
@@ -112,8 +112,6 @@ function PrimaryGrid(props){
     }
 
     function onColumnVisibilityModelChange(x){
-        console.log(x)
-        console.log(apiRef.current.exportState())
         uploadStateChange(apiRef.current.exportState()).then(console.log("donLSKJDALKDJAKe"))
     }
 
@@ -124,9 +122,7 @@ function PrimaryGrid(props){
         <Box sx={{height: "100vh", width: "100%" , border: "0px solid black"}}>
             <DataGridPremium
                 apiRef={apiRef}
-
-                initialState = {props.initialPrimaryGridState}
-
+                initialState = {props.initialState}
                 rowReordering
                 onColumnResize={x=> console.log(x)}
                 onColumnVisibilityModelChange = {onColumnVisibilityModelChange}
